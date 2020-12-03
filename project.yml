@@ -1,0 +1,13 @@
+name: CoMateDobreho
+options:
+  bundleIdPrefix: com.comatedobreho
+  deploymentTarget:
+    iOS: 9.0
+  xcodeVersion: "12.2"
+targets:
+  CoMateDobrehoApp:
+    type: application
+    platform: iOS
+    sources: [CoMateDobreho]
+    info:
+      path: CoMateDobreho/Info.plist
