@@ -1,9 +1,9 @@
 name: CoMateDobreho
 options:
-  bundleIdPrefix: com.comatedobreho
+  bundleIdPrefix: com.codobreho
   deploymentTarget:
     iOS: 9.0
-  xcodeVersion: "12.2"
+  xcodeVersion: "12.3"
 targets:
   CoMateDobrehoApp:
     type: application
@@ -11,3 +11,10 @@ targets:
     sources: [CoMateDobreho]
     info:
       path: CoMateDobreho/Info.plist
+      properties:
+        NSBluetoothAlwaysUsageDescription: "TODO"
+    postCompileScripts:
+      - script: swiftlint
+        name: SwiftLint
+      - script: "swiftformat . --swiftversion 5.3"
+        name: SwiftFormat
