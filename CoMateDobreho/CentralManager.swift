@@ -7,17 +7,42 @@
 //
 
 import CoreBluetooth
-import Foundation
+
+protocol CentralManagerDelegate: AnyObject {
+    func onDataReceived(_: String?, characteristicId: CharacteristicId)
+}
+
+public enum CharacteristicId: String, CaseIterable {
+    case soup = "b1faa5b2-95b1-436c-9bc5-82815228a3e1"
+    case firstMeal = "b1faa5b2-95b1-436c-9bc5-82815228a3e2"
+    case secondMeal = "b1faa5b2-95b1-436c-9bc5-82815228a3e3"
+    case thirdMeal = "b1faa5b2-95b1-436c-9bc5-82815228a3e4"
+
+    var asOfferScreenTag: OfferScreenTag {
+        switch self {
+        case .soup:
+            return .soup
+        case .firstMeal:
+            return .firstMeal
+        case .secondMeal:
+            return .secondMeal
+        case .thirdMeal:
+            return .thirdMeal
+        }
+    }
+}
 
 final class CentralManager: NSObject {
     static let shared = CentralManager()
 
     private var centralManager: CBCentralManager!
+    private weak var delegate: CentralManagerDelegate?
+    private var currentPeripheral: CBPeripheral?
 
     private static let mainServiceId = CBUUID(string: "f64642dc-22f5-450f-a2db-a0ab07c3d47f")
-    private static let mainCharacteristicId = CBUUID(string: "b1faa5b2-95b1-436c-9bc5-82815228a3e1")
 
-    public final func start() {
+    public final func start(with delegate: CentralManagerDelegate?) {
+        self.delegate = delegate
         centralManager = CBCentralManager(delegate: self, queue: nil)
     }
 }
@@ -36,6 +61,7 @@ extension CentralManager: CBCentralManagerDelegate {
         _: CBCentralManager, didDiscover peripheral: CBPeripheral,
         advertisementData _: [String: Any], rssi _: NSNumber
     ) {
+        currentPeripheral = peripheral
         peripheral.delegate = self
         centralManager.stopScan()
         centralManager.connect(peripheral)
@@ -50,7 +76,7 @@ extension CentralManager: CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices _: Error?) {
         guard let services = peripheral.services else { return }
         for service in services {
-            peripheral.discoverCharacteristics([Self.mainCharacteristicId], for: service)
+            peripheral.discoverCharacteristics(nil, for: service)
         }
     }
 
@@ -72,13 +98,15 @@ extension CentralManager: CBPeripheralDelegate {
         didUpdateValueFor characteristic: CBCharacteristic,
         error _: Error?
     ) {
-        switch characteristic.uuid {
-        case Self.mainCharacteristicId:
-            if let characteristicData = characteristic.value {
-                print(String(data: characteristicData, encoding: .utf8))
-            }
-        default:
-            ()
+        guard let characteristicId = CharacteristicId(
+            rawValue: characteristic.uuid.uuidString.lowercased()
+        ), let characteristicData = characteristic.value else {
+            return
         }
+
+        delegate?.onDataReceived(
+            String(data: characteristicData, encoding: .utf8),
+            characteristicId: characteristicId
+        )
     }
 }

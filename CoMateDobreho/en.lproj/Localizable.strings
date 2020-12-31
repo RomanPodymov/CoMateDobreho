@@ -1,0 +1,13 @@
+/* 
+  Localizable.strings
+  CoMateDobreho
+
+  Created by Roman Podymov on 31.12.2020.
+  
+*/
+
+"offer_screen.title" = "Offer for today";
+"offer_screen.soup" = "Soup";
+"offer_screen.first_meal" = "First meal";
+"offer_screen.second_meal" = "Second meal";
+"offer_screen.third_meal" = "Third meal";
