@@ -6,40 +6,61 @@
 //  Copyright © 2020 CoMateDobreho. All rights reserved.
 //
 
+import CoreBluetooth
 import Eureka
 import Foundation
+import UIKit
 
 enum OfferScreenTag: String {
     case soup
-    case firstMeal
-    case secondMeal
-    case thirdMeal
+    case firstDish
+    case secondDish
+    case thirdDish
 }
 
 final class OfferScreen: FormViewController {
+    public var peripheral: CBPeripheral? {
+        didSet {
+            if let peripheral = peripheral {
+                CentralManager.shared.connect(peripheral, peripheralDelegate: self)
+            }
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        form +++ Section(NSLocalizedString("offer_screen.title", comment: ""))
-            <<< LabelRow(OfferScreenTag.soup.rawValue) { row in
-                row.title = NSLocalizedString("offer_screen.soup", comment: "")
-            }
-            <<< LabelRow(OfferScreenTag.firstMeal.rawValue) { row in
-                row.title = NSLocalizedString("offer_screen.first_meal", comment: "")
-            }
-            <<< LabelRow(OfferScreenTag.secondMeal.rawValue) { row in
-                row.title = NSLocalizedString("offer_screen.second_meal", comment: "")
-            }
-            <<< LabelRow(OfferScreenTag.thirdMeal.rawValue) { row in
-                row.title = NSLocalizedString("offer_screen.third_meal", comment: "")
-            }
 
-        CentralManager.shared.start(with: self)
+        form +++ Section(L10n.OfferScreen.Dishes.title)
+            <<< LabelRow(OfferScreenTag.soup.rawValue) { row in
+                row.title = L10n.OfferScreen.Dishes.soup
+            }
+            <<< LabelRow(OfferScreenTag.firstDish.rawValue) { row in
+                row.title = L10n.OfferScreen.Dishes.firstDish
+            }
+            <<< LabelRow(OfferScreenTag.secondDish.rawValue) { row in
+                row.title = L10n.OfferScreen.Dishes.secondDish
+            }
+            <<< LabelRow(OfferScreenTag.thirdDish.rawValue) { row in
+                row.title = L10n.OfferScreen.Dishes.thirdDish
+            }
+    }
+
+    override func didMove(toParent parent: UIViewController?) {
+        super.didMove(toParent: parent)
+
+        if parent == nil, let peripheral = peripheral {
+            CentralManager.shared.disconnect(peripheral)
+        }
     }
 }
 
-extension OfferScreen: CentralManagerDelegate {
+extension OfferScreen: PeripheralDelegate {
     func onDataReceived(_ data: String?, characteristicId: CharacteristicId) {
-        guard let data = data, let rowForCharacteristicId = form.rowBy(tag: characteristicId.asOfferScreenTag.rawValue) as? LabelRow else {
+        guard let data = data,
+              let rowForCharacteristicId = form.rowBy(
+                  tag: characteristicId.asOfferScreenTag.rawValue
+              ) as? LabelRow
+        else {
             return
         }
         rowForCharacteristicId.value = data

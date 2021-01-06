@@ -2,7 +2,7 @@ name: CoMateDobreho
 options:
   bundleIdPrefix: com.codobreho
   deploymentTarget:
-    iOS: 9.0
+    iOS: 11.0
   xcodeVersion: "12.3"
 packages:
   Eureka:
@@ -25,8 +25,11 @@ targets:
           UIInterfaceOrientationLandscapeLeft,
           UIInterfaceOrientationLandscapeRight
         ]
+    preBuildScripts:
+      - script: "mint run swiftgen"
+        name: SwiftGen
     postCompileScripts:
-      - script: swiftlint
-        name: SwiftLint
-      - script: "swiftformat . --swiftversion 5.3"
+      - script: "mint run swiftformat . --swiftversion 5.3"
         name: SwiftFormat
+      - script: "mint run swiftlint"
+        name: SwiftLint

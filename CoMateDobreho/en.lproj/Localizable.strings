@@ -6,8 +6,8 @@
   
 */
 
-"offer_screen.title" = "Offer for today";
-"offer_screen.soup" = "Soup";
-"offer_screen.first_meal" = "First meal";
-"offer_screen.second_meal" = "Second meal";
-"offer_screen.third_meal" = "Third meal";
+"offer_screen.dishes.title" = "Offer for today";
+"offer_screen.dishes.soup" = "Soup";
+"offer_screen.dishes.first_dish" = "First dish";
+"offer_screen.dishes.second_dish" = "Second dish";
+"offer_screen.dishes.third_dish" = "Third dish";

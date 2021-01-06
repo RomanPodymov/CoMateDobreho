@@ -17,8 +17,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
-        let viewController = OfferScreen()
-        window?.rootViewController = viewController
+        let rootController = UINavigationController(rootViewController: RestaurantsScreen())
+        window?.rootViewController = rootController
         window?.makeKeyAndVisible()
 
         return true
