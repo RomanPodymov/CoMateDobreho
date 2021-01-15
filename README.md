@@ -1,7 +1,7 @@
 # CoMateDobreho
 
 ![CoMateDobreho main screen](https://github.com/RomanPodymov/CoMateDobreho/blob/main/Screenshot/main.png "CoMateDobreho main screen")
-![CoMateDobreho detail screen](https://github.com/RomanPodymov/CoMateDobreho/blob/main/Screenshot/main.png "CoMateDobreho detail screen")
+![CoMateDobreho detail screen](https://github.com/RomanPodymov/CoMateDobreho/blob/main/Screenshot/detail.png "CoMateDobreho detail screen")
 
 App for clients to receive dishes via Bluetooth. Works with [CoMameDobreho](https://github.com/RomanPodymov/CoMameDobreho).
 
